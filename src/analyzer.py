@@ -34,6 +34,12 @@ def main() -> None:
         total_distance = swim_data["distance_m"].sum()
         average_heart_rate = swim_data["avg_hr"].mean()
         average_pace = swim_data["pace_min_per_100m"].mean()
+        fastest_session = swim_data.loc[
+             swim_data["pace_min_per_100m"].idxmin()
+             ]
+        longest_session = swim_data.loc[
+             swim_data["distance_m"].idxmax()
+             ]
 
         print("\nSWIMMING DATA SUMMARY")
         print("---------------------")
@@ -41,7 +47,14 @@ def main() -> None:
         print(f"Total distance: {total_distance:.0f} m")
         print(f"Average heart rate: {average_heart_rate:.1f} bpm")
         print(f"Average pace: {format_pace(average_pace)} per 100 m")
-
+        print(
+            f"Fastest session: {fastest_session['date']} "
+            f"at {format_pace(fastest_session['pace_min_per_100m'])} per 100 m"
+            )
+        print(
+            f"Longest session: {longest_session['date']} "
+            f"at {longest_session['distance_m']:.0f} m"
+        )
     except FileNotFoundError as error:
         print(f"Error: {error}")
 if __name__ == "__main__":
