@@ -90,9 +90,54 @@ def print_session_type_summary(swim_data: pd.DataFrame) -> None:
             f"{format_pace(row['average_pace'])} per 100 m"
         )
 
+def validate_data(swim_data: pd.DataFrame) -> None:
+    required_columns = {
+        "date",
+        "distance_m",
+        "duration_min",
+        "avg_hr",
+        "max_hr",
+        "session_type",
+        "rpe",
+    }
+
+    missing_columns = required_columns - set(swim_data.columns)
+
+    if missing_columns:
+        raise ValueError(
+            f"Missing required columns: {sorted(missing_columns)}"
+        )
+
+    if swim_data.empty:
+        raise ValueError("The swimming dataset is empty.")
+
+    if swim_data.isnull().any().any():
+        raise ValueError("The dataset contains missing values.")
+
+    if (swim_data["distance_m"] <= 0).any():
+        raise ValueError("All distance values must be greater than zero.")
+
+    if (swim_data["duration_min"] <= 0).any():
+        raise ValueError("All duration values must be greater than zero.")
+
+    if (swim_data["avg_hr"] <= 0).any():
+        raise ValueError("Average heart-rate values must be greater than zero.")
+
+    if (swim_data["max_hr"] <= 0).any():
+        raise ValueError("Maximum heart-rate values must be greater than zero.")
+
+    if (swim_data["max_hr"] < swim_data["avg_hr"]).any():
+        raise ValueError(
+            "Maximum heart rate cannot be lower than average heart rate."
+        )
+
+    if not swim_data["rpe"].between(1, 10).all():
+        raise ValueError("RPE values must be between 1 and 10.")
+    
 def main() -> None:
     try:
         swim_data = load_data(DATA_FILE)
+        validate_data(swim_data)
 
         swim_data["pace_min_per_100m"] = (
             swim_data["duration_min"] / swim_data["distance_m"] * 100
@@ -126,7 +171,7 @@ def main() -> None:
         print_session_type_summary(swim_data)
         create_pace_graph(swim_data)
         create_heart_rate_graph(swim_data)
-    except FileNotFoundError as error:
+    except ( FileNotFoundError, ValueError, pd.errors.ParserError,) as error:
         print(f"Error: {error}")
 if __name__ == "__main__":
     main()
