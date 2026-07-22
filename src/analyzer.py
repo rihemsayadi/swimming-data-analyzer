@@ -45,6 +45,25 @@ def create_pace_graph(swim_data: pd.DataFrame) -> None:
     plt.close()
 
     print(f"Saved graph: {output_file}")
+def create_heart_rate_graph(swim_data: pd.DataFrame) -> None:
+    OUTPUT_DIR.mkdir(exist_ok=True)
+
+    plt.figure(figsize=(8, 5))
+    plt.scatter(
+        swim_data["avg_hr"],
+        swim_data["pace_min_per_100m"],
+    )
+
+    plt.title("Heart Rate Versus Swimming Pace")
+    plt.xlabel("Average Heart Rate (bpm)")
+    plt.ylabel("Pace (minutes per 100 m)")
+    plt.tight_layout()
+
+    output_file = OUTPUT_DIR / "heart_rate_vs_pace.png"
+    plt.savefig(output_file)
+    plt.close()
+
+    print(f"Saved graph: {output_file}")    
 def main() -> None:
     try:
         swim_data = load_data(DATA_FILE)
@@ -79,6 +98,7 @@ def main() -> None:
             f"at {longest_session['distance_m']:.0f} m"
         )
         create_pace_graph(swim_data)
+        create_heart_rate_graph(swim_data)
     except FileNotFoundError as error:
         print(f"Error: {error}")
 if __name__ == "__main__":
