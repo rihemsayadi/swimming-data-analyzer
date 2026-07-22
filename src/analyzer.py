@@ -64,6 +64,32 @@ def create_heart_rate_graph(swim_data: pd.DataFrame) -> None:
     plt.close()
 
     print(f"Saved graph: {output_file}")    
+
+def print_session_type_summary(swim_data: pd.DataFrame) -> None:
+    summary = (
+        swim_data.groupby("session_type")
+        .agg(
+            sessions=("session_type", "count"),
+            total_distance_m=("distance_m", "sum"),
+            average_heart_rate=("avg_hr", "mean"),
+            average_pace=("pace_min_per_100m", "mean"),
+        )
+        .reset_index()
+    )
+
+    print("\nSUMMARY BY SESSION TYPE")
+    print("-----------------------")
+
+    for _, row in summary.iterrows():
+        print(f"\n{row['session_type']}")
+        print(f"  Sessions: {int(row['sessions'])}")
+        print(f"  Total distance: {row['total_distance_m']:.0f} m")
+        print(f"  Average heart rate: {row['average_heart_rate']:.1f} bpm")
+        print(
+            "  Average pace: "
+            f"{format_pace(row['average_pace'])} per 100 m"
+        )
+
 def main() -> None:
     try:
         swim_data = load_data(DATA_FILE)
@@ -97,6 +123,7 @@ def main() -> None:
             f"Longest session: {longest_session['date']} "
             f"at {longest_session['distance_m']:.0f} m"
         )
+        print_session_type_summary(swim_data)
         create_pace_graph(swim_data)
         create_heart_rate_graph(swim_data)
     except FileNotFoundError as error:
