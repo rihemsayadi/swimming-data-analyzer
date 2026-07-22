@@ -1,0 +1,59 @@
+SWIMMING DATA REPORT
+====================
+
+OVERALL SUMMARY
+---------------
+Number of sessions: 6
+Total distance: 12500 m
+Average heart rate: 150.3 bpm
+Average pace: 2:03 per 100 m
+Fastest session: 2026-07-13 at 1:54 per 100 m
+Longest session: 2026-07-07 at 2500 m
+
+SUMMARY BY SESSION TYPE
+-----------------------
+
+Aerobic
+Sessions: 3
+Total distance: 6600 m
+Average heart rate: 148.3 bpm
+Average pace: 2:03 per 100 m
+
+Easy
+Sessions: 1
+Total distance: 2500 m
+Average heart rate: 142.0 bpm
+Average pace: 2:12 per 100 m
+
+Sprint
+Sessions: 1
+Total distance: 1600 m
+Average heart rate: 160.0 bpm
+Average pace: 1:54 per 100 m
+
+Threshold
+Sessions: 1
+Total distance: 1800 m
+Average heart rate: 155.0 bpm
+Average pace: 2:00 per 100 m
+
+WEEKLY TRAINING SUMMARY
+-----------------------
+
+Week starting 2026-06-29
+Sessions: 2
+Total distance: 3800 m
+Average heart rate: 151.5 bpm
+Average pace: 2:04 per 100 m
+
+Week starting 2026-07-06
+Sessions: 2
+Total distance: 4700 m
+Average heart rate: 146.5 bpm
+Average pace: 2:06 per 100 m
+
+Week starting 2026-07-13
+Sessions: 2
+Total distance: 4000 m
+Average heart rate: 153.0 bpm
+Average pace: 1:58 per 100 m
