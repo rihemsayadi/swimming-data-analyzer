@@ -1,10 +1,12 @@
 from pathlib import Path
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 DATA_FILE = PROJECT_DIR / "data" / "swim_sessions.csv"
+OUTPUT_DIR = PROJECT_DIR / "output"
 
 
 def load_data(file_path: Path) -> pd.DataFrame:
@@ -22,7 +24,27 @@ def format_pace(decimal_minutes: float) -> str:
         seconds = 0
 
     return f"{minutes}:{seconds:02d}"
+def create_pace_graph(swim_data: pd.DataFrame) -> None:
+    OUTPUT_DIR.mkdir(exist_ok=True)
 
+    plt.figure(figsize=(9, 5))
+    plt.plot(
+        swim_data["date"],
+        swim_data["pace_min_per_100m"],
+        marker="o",
+    )
+
+    plt.title("Swimming Pace Over Time")
+    plt.xlabel("Date")
+    plt.ylabel("Pace (minutes per 100 m)")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    output_file = OUTPUT_DIR / "pace_over_time.png"
+    plt.savefig(output_file)
+    plt.close()
+
+    print(f"Saved graph: {output_file}")
 def main() -> None:
     try:
         swim_data = load_data(DATA_FILE)
@@ -34,6 +56,7 @@ def main() -> None:
         total_distance = swim_data["distance_m"].sum()
         average_heart_rate = swim_data["avg_hr"].mean()
         average_pace = swim_data["pace_min_per_100m"].mean()
+        swim_data["date"] = pd.to_datetime(swim_data["date"])
         fastest_session = swim_data.loc[
              swim_data["pace_min_per_100m"].idxmin()
              ]
@@ -55,6 +78,7 @@ def main() -> None:
             f"Longest session: {longest_session['date']} "
             f"at {longest_session['distance_m']:.0f} m"
         )
+        create_pace_graph(swim_data)
     except FileNotFoundError as error:
         print(f"Error: {error}")
 if __name__ == "__main__":
