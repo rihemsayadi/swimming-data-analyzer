@@ -13,6 +13,16 @@ def load_data(file_path: Path) -> pd.DataFrame:
 
     return pd.read_csv(file_path)
 
+def format_pace(decimal_minutes: float) -> str:
+    minutes = int(decimal_minutes)
+    seconds = round((decimal_minutes - minutes) * 60)
+
+    if seconds == 60:
+        minutes += 1
+        seconds = 0
+
+    return f"{minutes}:{seconds:02d}"
+
 def main() -> None:
     try:
         swim_data = load_data(DATA_FILE)
@@ -30,7 +40,7 @@ def main() -> None:
         print(f"Number of sessions: {len(swim_data)}")
         print(f"Total distance: {total_distance:.0f} m")
         print(f"Average heart rate: {average_heart_rate:.1f} bpm")
-        print(f"Average pace: {average_pace:.2f} min/100 m")
+        print(f"Average pace: {format_pace(average_pace)} per 100 m")
 
     except FileNotFoundError as error:
         print(f"Error: {error}")
